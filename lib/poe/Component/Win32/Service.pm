@@ -16,7 +16,7 @@ use Win32::Service qw(StartService StopService GetStatus PauseService ResumeServ
 use Carp qw(carp croak);
 use vars qw($VERSION);
 
-$VERSION = '0.01';
+$VERSION = '0.50';
 
 our %cmd_map = ( qw(start StartService stop StopService restart RestartService status GetStatus pause PauseService resume ResumeService services GetServices) );
 
@@ -162,6 +162,16 @@ sub session_id {
   return $_[0]->{session_id};
 }
 
+sub yield {
+   my ($self) = shift;
+   $poe_kernel->post( $self->session_id() => @_ );
+}
+
+sub call {
+   my ($self) = shift;
+   $poe_kernel->call( $self->session_id() => @_ );
+}
+
 # Main Wheel::Run process sub
 
 sub process_requests {
@@ -237,25 +247,25 @@ POE::Component::Win32::Service - A POE component that provides non-blocking acce
 
 =head1 SYNOPSIS
 
-use POE::Component::Win32::Service;
+  use POE::Component::Win32::Service;
 
-my ($poco) = POE::Component::Win32::Service->spawn( alias => 'win32-service', debug => 1, options => { trace => 1 } );
+  my ($poco) = POE::Component::Win32::Service->spawn( alias => 'win32-service', debug => 1, options => { trace => 1 } );
 
-# Start your POE sessions
+  # Start your POE sessions
 
-$kernel->post( 'win32-service' => restart => { host => 'win32server', 
+  $kernel->post( 'win32-service' => restart => { host => 'win32server', 
 					       service => 'someservice',
 					       event => 'result' } );
 
-sub result {
-  my ($kernel,$ref) = @_[KERNEL,ARG0];
+  sub result {
+    my ($kernel,$ref) = @_[KERNEL,ARG0];
 
-  if ( $ref->{result} ) {
+    if ( $ref->{result} ) {
   	print STDOUT "Service " . $ref->{service} . " was restarted\n";
-  } else {
+    } else {
   	print STDERR join(' ', @{ $ref->{error} ) . "\n";
+    }
   }
-}
 
 =head1 DESCRIPTION
 
@@ -279,6 +289,18 @@ options that are passed to the component's session creator.
 
 Takes no arguments, returns the L<POE::Session|POE::Session> ID of the component. Useful if you don't want to use
 aliases.
+
+=item yield
+
+This method provides an alternative object based means of posting events to the component. First argument is the event to post, following arguments are sent as arguments to the resultant post.
+
+  $poco->yield( 'restart' => { host => 'win32server', service => 'someservice', event => 'result' } );
+
+=item call
+
+This method provides an alternative object based means of calling events to the component. First argument is the event to call, following arguments are sent as arguments to the resultant call.
+
+  $poco->call( 'restart' => { host => 'win32server', service => 'someservice', event => 'result' } );
 
 =back
 
