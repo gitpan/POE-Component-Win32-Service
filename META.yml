@@ -18,4 +18,4 @@ requires:
   Carp: 0
   POE: 0.38
   Win32::Service: 0
-version: 1.06
+version: 1.07
