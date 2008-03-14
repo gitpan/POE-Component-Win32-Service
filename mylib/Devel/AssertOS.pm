@@ -1,6 +1,7 @@
 # $Id: AssertOS.pm,v 1.4 2007/10/19 16:59:04 drhyde Exp $
 
-package Devel::AssertOS;
+package #
+Devel::AssertOS;
 
 use Devel::CheckOS;
 

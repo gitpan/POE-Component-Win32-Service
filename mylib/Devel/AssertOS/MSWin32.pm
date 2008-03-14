@@ -1,6 +1,7 @@
 # $Id: MSWin32.pm,v 1.2 2007/10/19 16:45:52 drhyde Exp $
 
-package Devel::AssertOS::MSWin32;
+package #
+Devel::AssertOS::MSWin32;
 
 use Devel::CheckOS;
 

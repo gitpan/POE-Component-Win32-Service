@@ -1,6 +1,7 @@
 # $Id: Cygwin.pm,v 1.2 2007/10/19 16:45:51 drhyde Exp $
 
-package Devel::AssertOS::Cygwin;
+package #
+Devel::AssertOS::Cygwin;
 
 use Devel::CheckOS;
 

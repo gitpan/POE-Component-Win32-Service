@@ -19,5 +19,13 @@ no_index:
 requires:
   Carp: 0
   POE: 0.38
+  POE::Filter::Line: 0
+  POE::Filter::Reference: 0
+  POE::Wheel::Run: 0
+  Win32: 0
   Win32::Service: 0
-version: 1.18
+  strict: 0
+  vars: 0
+  warnings: 0
+tests: t/*.t xt/*.t
+version: 1.20
